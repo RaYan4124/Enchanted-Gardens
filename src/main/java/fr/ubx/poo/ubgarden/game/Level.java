@@ -1,12 +1,21 @@
 package fr.ubx.poo.ubgarden.game;
 
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.Flowers;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestWasp;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestHornet;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextOpened;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextClosed;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 import fr.ubx.poo.ubgarden.game.go.decor.Tree;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +53,47 @@ public class Level implements Map {
                     }
                     case Land:{
                         decors.put(position, new Land(position));
+                        break;
+                    }
+                    case Flowers:
+                        decors.put(position, new Flowers(position));
+                        break;
+                    case NestWasp:{
+                        decors.put(position, new NestWasp(position));
+                        break;
+                    }
+                    case NestHornet:{
+                        decors.put(position, new NestHornet(position));
+                        break;
+                    }
+                    case DoorNextOpened:{
+                        decors.put(position, new DoorNextOpened(position));
+                        break;
+                    }
+                    case DoorNextClosed:{
+                        decors.put(position, new DoorNextClosed(position));
+                        break;
+                    }
+                    case Hedgehog:{
+                        decors.put(position, new Hedgehog(position));
+                        break;
+                    }
+                    case Carrots:{
+                        Decor land = new Land(position);
+                        land.setBonus(new Carrots(position, land));
+                        decors.put(position,land);
+                        break;
+                    }
+                    case PoisonedApple:{
+                        Decor grass = new Grass(position);
+                        grass.setBonus(new PoisonedApple(position, grass));
+                        decors.put(position,grass);
+                        break;
+                    }
+                    case Insecticide:{
+                        Decor grass = new Grass(position);
+                        grass.setBonus(new Insecticide(position, grass));
+                        decors.put(position,grass);
                         break;
                     }
                     default:
