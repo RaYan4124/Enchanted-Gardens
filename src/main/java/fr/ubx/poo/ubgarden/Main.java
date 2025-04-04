@@ -1,5 +1,7 @@
 package fr.ubx.poo.ubgarden;
 
+import fr.ubx.poo.ubgarden.game.launcher.MapLevelDefaultStart;
+import fr.ubx.poo.ubgarden.game.launcher.MapLevelDefaultStart.*;
 import fr.ubx.poo.ubgarden.game.view.GameLauncherView;
 import javafx.application.Application;
 import javafx.scene.Scene;

@@ -57,5 +57,4 @@ public class GameLauncher {
     private static class LoadSingleton {
         static final GameLauncher INSTANCE = new GameLauncher();
     }
-
 }

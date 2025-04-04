@@ -14,7 +14,9 @@ public enum MapEntity {
     DoorPrevOpened('<'),
     DoorNextOpened('>'),
     DoorNextClosed('D'),
-
+    Wasp('W'),
+    Hornet('R'),
+    Insecticide('I'),
     NestWasp('n'),
     NestHornet('N');
 

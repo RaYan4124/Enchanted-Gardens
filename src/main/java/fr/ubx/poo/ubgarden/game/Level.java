@@ -3,6 +3,7 @@ package fr.ubx.poo.ubgarden.game;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 import fr.ubx.poo.ubgarden.game.go.decor.Tree;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
@@ -39,6 +40,10 @@ public class Level implements Map {
                         Decor grass = new Grass(position);
                         grass.setBonus(new EnergyBoost(position, grass));
                         decors.put(position, grass);
+                        break;
+                    }
+                    case Land:{
+                        decors.put(position, new Land(position));
                         break;
                     }
                     default:
