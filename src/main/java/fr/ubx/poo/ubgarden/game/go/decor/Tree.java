@@ -16,4 +16,6 @@ public class Tree extends Decor {
     public boolean walkableBy(Gardener gardener) {
         return gardener.canWalkOn(this);
     }
+
+  
 }

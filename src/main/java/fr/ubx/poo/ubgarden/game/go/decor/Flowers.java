@@ -1,6 +1,7 @@
 package main.java.fr.ubx.poo.ubgarden.game.go.decor;
 import fr.ubx.poo.ubgarden.game.Position;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
 
 public class Flowers extends Decor {
 
@@ -8,7 +9,8 @@ public class Flowers extends Decor {
         super(position);
     }
     
-    public boolean isWalkable() {
+    @Override
+    public boolean walkableBy(Gardener gardener) {
         return false;
     }
 }
