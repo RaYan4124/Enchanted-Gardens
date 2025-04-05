@@ -13,18 +13,27 @@ import fr.ubx.poo.ubgarden.game.go.PickupVisitor;
 import fr.ubx.poo.ubgarden.game.go.WalkVisitor;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.engine.Timer;
+import fr.ubx.poo.ubgarden.game.go.Walkable;
+import fr.ubx.poo.ubgarden.game.engine.StatusBar;
+
 
 public class Gardener extends GameObject implements Movable, PickupVisitor, WalkVisitor {
 
     private final int energy;
+    private int currentEnergy;
     private Direction direction;
     private boolean moveRequested = false;
+    private Timer timer;
+    private long lastreduceenergytime = 0;
 
     public Gardener(Game game, Position position) {
 
         super(game, position);
         this.direction = Direction.DOWN;
         this.energy = game.configuration().gardenerEnergy();
+        this.timer = new Timer(1000);
+        this.currentEnergy = energy;
     }
 
     @Override
@@ -36,7 +45,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
     public int getEnergy() {
-        return this.energy;
+        return this.currentEnergy;
     }
 
 
@@ -82,13 +91,11 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
             System.out.println("deplacement hors des limites !");
             return getPosition(); // retourne la position actuelle sans effectuer de déplacement
         }
-    
         // recupere l'objet Decor à la position cible
         Decor next = game.world().getGrid().get(nextPos);
     
         // Met à jour la position du jardinier
         setPosition(nextPos);
-    
         // Interagit avec l'objet Decor s'il existe
         if (next != null) {
             next.walkableBy(this);
@@ -102,9 +109,22 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         if (moveRequested) {
             if (canMove(direction)) {
                 move(direction);
+                ReduceEnergy();
             }
-        }
-        moveRequested = false;
+            moveRequested = false;   
+            timer.stop(); //aucune regenaration d'energie en cours
+            lastreduceenergytime = now;
+        }else{
+            if(currentEnergy < 100){
+                timer.update(now); //mis a jour a l'instant t
+                if(!timer.isRunning() && (now - lastreduceenergytime) > 1000000000){ //si le temps entre la derniere reduction et now est d'en moins 1s
+                    currentEnergy++;
+                    timer.start();
+                }
+            }else{
+                timer.stop();
+            }
+        }    
     }
 
     public void hurt(int damage) {
@@ -118,5 +138,10 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         return direction;
     }
 
+    public void ReduceEnergy(){
+        if(this.currentEnergy > 0){
+            this.currentEnergy--;
+        }
+    }
 
 }

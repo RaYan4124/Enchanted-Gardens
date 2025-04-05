@@ -41,6 +41,11 @@ public class Timer {
             remaining = duration;
     }
 
+    public void stop() {
+        running = false;
+        requested = false;
+    }
+
     // Check if the timer is still running
     public boolean isRunning() {
         return running || requested;
