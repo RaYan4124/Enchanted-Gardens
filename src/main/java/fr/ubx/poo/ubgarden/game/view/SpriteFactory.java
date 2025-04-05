@@ -18,6 +18,7 @@ import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
+import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
 import javafx.scene.layout.Pane;
 
 import static fr.ubx.poo.ubgarden.game.view.ImageResource.*;
@@ -53,6 +54,7 @@ public final class SpriteFactory {
             return new Sprite(layer, factory.get(POISONED_APPLE), gameObject);
         if (gameObject instanceof Insecticide)
             return new Sprite(layer, factory.get(INSECTICIDE), gameObject);  
+        
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);
     }
 }

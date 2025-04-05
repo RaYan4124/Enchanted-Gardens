@@ -57,10 +57,26 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     @Override
     public Position move(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
+    
+        // check si la position cible est dans les limites de la carte
+        if (nextPos.x() < 0 || nextPos.x() >= game.world().getGrid().width() ||
+            nextPos.y() < 0 || nextPos.y() >= game.world().getGrid().height()) {
+            System.out.println("deplacement hors des limites !");
+            return getPosition(); // retourne la position actuelle sans effectuer de déplacement
+        }
+    
+        // recupere l'objet Decor à la position cible
         Decor next = game.world().getGrid().get(nextPos);
+    
+        // Met à jour la position du jardinier
         setPosition(nextPos);
-        if (next != null)
-            next.pickUpBy(this);
+    
+        // Interagit avec l'objet Decor s'il existe
+        if (next != null) {
+            next.walkableBy(this);
+            //next.pickUpBy(this);
+        }
+    
         return nextPos;
     }
 
