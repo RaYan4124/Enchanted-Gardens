@@ -50,6 +50,9 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
     public void requestMove(Direction direction) {
+        if(game.isGameOver()){
+            return;
+        }
         if (direction != this.direction) {
             this.direction = direction;
             setModified(true);
@@ -83,20 +86,21 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public Position move(Direction direction) {
+        if(game.isGameOver()){
+            return getPosition(); // retourne la position actuelle sans effectuer de déplacement
+        }
         Position nextPos = direction.nextPosition(getPosition());
     
         // check si la position cible est dans les limites de la carte
-        if (nextPos.x() < 0 || nextPos.x() >= game.world().getGrid().width() ||
-            nextPos.y() < 0 || nextPos.y() >= game.world().getGrid().height()) {
-            System.out.println("deplacement hors des limites !");
+        if (!this.canMove(direction)) {
             return getPosition(); // retourne la position actuelle sans effectuer de déplacement
         }
         // recupere l'objet Decor à la position cible
         Decor next = game.world().getGrid().get(nextPos);
     
-        // Met à jour la position du jardinier
+        // met à jour la position du jardinier
         setPosition(nextPos);
-        // Interagit avec l'objet Decor s'il existe
+        // interagit avec l'objet Decor s'il existe
         if (next != null) {
             next.walkableBy(this);
             //next.pickUpBy(this);
@@ -106,6 +110,11 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void update(long now) {
+        if(currentEnergy <= 0){
+            game.setGameOver(true);
+            moveRequested = false;
+            return;
+        }
         if (moveRequested) {
             if (canMove(direction)) {
                 move(direction);

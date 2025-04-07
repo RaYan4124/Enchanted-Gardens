@@ -10,10 +10,19 @@ public class Game {
     private final Gardener gardener;
     private boolean switchLevelRequested = false;
     private int switchLevel;
+    private boolean GameOver = false;
     public Game(World world, Configuration configuration, Position gardenerPosition) {
         this.configuration = configuration;
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
+    }
+
+    public boolean isGameOver() {
+        return GameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        GameOver = gameOver;
     }
 
     public Configuration configuration() {
