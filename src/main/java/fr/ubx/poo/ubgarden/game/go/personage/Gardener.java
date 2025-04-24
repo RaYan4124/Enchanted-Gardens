@@ -46,9 +46,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     public void pickUp(Carrots carrots) {
         if (this.getPosition().equals(carrots.getPosition())) {
-            carrots.collect(); // Logique de collecte (par exemple, augmenter le score)
-            carrots.remove();  // Supprime la carotte de la grille
-            System.out.println("Carrot collected at position " + carrots.getPosition());
+            carrots.collect(); 
+            carrots.remove();  
         }
     }
 
@@ -59,9 +58,6 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
     public void requestMove(Direction direction) {
-        /*if(game.isGameOver()){
-            return;
-        }*/
         if (direction != this.direction) {
             this.direction = direction;
             setModified(true);
