@@ -160,12 +160,10 @@
 
         private void update(long now) {
             game.world().getGrid().values().forEach(decor -> decor.update(now));
-
             gardener.update(now);
-
-            if (gardener.getEnergy() < 0) {
+            if (gardener.getEnergy() <= 0) {
                 gameLoop.stop();
-                showMessage("Perdu!", Color.RED);
+                showMessage("Game Over !!", Color.RED);
             }
         }
 

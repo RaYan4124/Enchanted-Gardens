@@ -4,6 +4,7 @@
 
 package fr.ubx.poo.ubgarden.game.go.personage;
 
+import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
 import fr.ubx.poo.ubgarden.game.Direction;
 import fr.ubx.poo.ubgarden.game.Game;
 import fr.ubx.poo.ubgarden.game.Position;
@@ -13,6 +14,7 @@ import fr.ubx.poo.ubgarden.game.go.PickupVisitor;
 import fr.ubx.poo.ubgarden.game.go.WalkVisitor;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.engine.Timer;
 import fr.ubx.poo.ubgarden.game.go.Walkable;
 import fr.ubx.poo.ubgarden.game.engine.StatusBar;
@@ -38,9 +40,16 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public void pickUp(EnergyBoost energyBoost) {
-// TODO
         System.out.println("I am taking the boost, I should do something ...");
 
+    }
+
+    public void pickUp(Carrots carrots) {
+        if (this.getPosition().equals(carrots.getPosition())) {
+            carrots.collect(); // Logique de collecte (par exemple, augmenter le score)
+            carrots.remove();  // Supprime la carotte de la grille
+            System.out.println("Carrot collected at position " + carrots.getPosition());
+        }
     }
 
 
@@ -50,9 +59,9 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
 
     public void requestMove(Direction direction) {
-        if(game.isGameOver()){
+        /*if(game.isGameOver()){
             return;
-        }
+        }*/
         if (direction != this.direction) {
             this.direction = direction;
             setModified(true);
@@ -86,35 +95,31 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public Position move(Direction direction) {
-        if(game.isGameOver()){
-            return getPosition(); // retourne la position actuelle sans effectuer de déplacement
-        }
         Position nextPos = direction.nextPosition(getPosition());
     
         // check si la position cible est dans les limites de la carte
         if (!this.canMove(direction)) {
             return getPosition(); // retourne la position actuelle sans effectuer de déplacement
         }
+
         // recupere l'objet Decor à la position cible
         Decor next = game.world().getGrid().get(nextPos);
-    
         // met à jour la position du jardinier
         setPosition(nextPos);
+
         // interagit avec l'objet Decor s'il existe
+        Bonus bonus = next.getBonus();
+        if(bonus instanceof Carrots){
+            this.pickUp((Carrots)bonus);
+        }
+
         if (next != null) {
             next.walkableBy(this);
-            //next.pickUpBy(this);
         }
-    
         return nextPos;
     }
 
     public void update(long now) {
-        if(currentEnergy <= 0){
-            game.setGameOver(true);
-            moveRequested = false;
-            return;
-        }
         if (moveRequested) {
             if (canMove(direction)) {
                 move(direction);
