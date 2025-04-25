@@ -3,6 +3,8 @@ package fr.ubx.poo.ubgarden.game.launcher;
 import fr.ubx.poo.ubgarden.game.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class GameLauncher {
@@ -37,7 +39,24 @@ public class GameLauncher {
     }
 
     public Game load(File file) {
-        return null;
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream(file)) {
+            properties.load(input);
+         } catch (IOException e) {
+            throw new RuntimeException("failed to load configuration file: " + file.getAbsolutePath(), e);
+        }
+
+        Configuration configuration = getConfiguration(properties);
+        MapLevel mapLevel = new MapLevelDefaultStart();
+        Position gardenerPosition = mapLevel.getGardenerPosition();
+        if (gardenerPosition == null) {
+            throw new RuntimeException("gardener not found");
+        }
+        World world = new World(1);
+        Game game = new Game(world, configuration, gardenerPosition);
+        Map level = new Level(game, 1, mapLevel);
+        world.put(1, level);
+        return game;
     }
 
     public Game load() {

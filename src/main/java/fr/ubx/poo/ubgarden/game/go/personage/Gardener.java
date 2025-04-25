@@ -4,6 +4,8 @@
 
 package fr.ubx.poo.ubgarden.game.go.personage;
 
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
 import fr.ubx.poo.ubgarden.game.Direction;
 import fr.ubx.poo.ubgarden.game.Game;
@@ -24,6 +26,8 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     private final int energy;
     private int currentEnergy;
+    private int currentInsecticide;
+    private int diseaseLevel;
     private Direction direction;
     private boolean moveRequested = false;
     private Timer timer;
@@ -40,8 +44,13 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
 
     @Override
     public void pickUp(EnergyBoost energyBoost) {
-        System.out.println("I am taking the boost, I should do something ...");
-
+        if(this.getEnergy() < 100){
+            this.currentEnergy += 5;
+            if(this.currentEnergy > 100){
+                this.currentEnergy = 100;
+            }
+        }
+        energyBoost.remove();
     }
 
     public void pickUp(Carrots carrots) {
@@ -50,12 +59,34 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
             carrots.remove();  
         }
     }
+    
+    public void pickUp(Insecticide ins){
+        if(this.getPosition().equals(ins.getPosition())){
+            currentInsecticide += 1;
+            ins.collect();
+            ins.remove();
+        }
+    }
 
+    public void pickUp(PoisonedApple pa){
+        if(this.getPosition().equals(pa.getPosition())){
+            diseaseLevel += 1 ;
+            pa.collect();
+            pa.remove();
+        }
+    }
 
     public int getEnergy() {
         return this.currentEnergy;
     }
+    
+    public int getInsecticide(){
+        return this.currentInsecticide;
+    }
 
+    public int getDiseaseLevel(){
+        return this.diseaseLevel;
+    }
 
     public void requestMove(Direction direction) {
         if (direction != this.direction) {
@@ -107,7 +138,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         Bonus bonus = next.getBonus();
         if(bonus instanceof Carrots){
             this.pickUp((Carrots)bonus);
+        }else if(bonus instanceof EnergyBoost){
+            this.pickUp((EnergyBoost)bonus);
+        }else if(bonus instanceof Insecticide){
+            this.pickUp((Insecticide)bonus);
+        }else if(bonus instanceof PoisonedApple){
+            this.pickUp((PoisonedApple)bonus);
         }
+
 
         if (next != null) {
             next.walkableBy(this);
