@@ -163,6 +163,7 @@ import java.util.*;
             game.world().getGrid().values().forEach(decor -> decor.update(now));
             gardener.update(now);
             if (gardener.getEnergy() <= 0) {
+                this.game.setGameOver(true);
                 gameLoop.stop();
                 showMessage("Game Over !!", Color.RED);
             } else {

@@ -54,7 +54,7 @@ public class MapLevel {
         int height = lines.length;
         int width = lines[0].length(); // supposition que toutes les lignes sont bien de la même longueur
         MapLevel mapLevel = new MapLevel(width, height);
-    
+
         for (int j = 0; j < height; j++) {
             String line = lines[j];
             if (line.length() != width)

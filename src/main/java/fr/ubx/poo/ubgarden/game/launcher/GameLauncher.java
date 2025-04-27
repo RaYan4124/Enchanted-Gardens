@@ -42,7 +42,7 @@ public class GameLauncher {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream(file)) {
             properties.load(input);
-            System.out.println("Chargement du fichier...");
+            System.out.println("Loading .....");
         } catch (IOException e) {
             throw new RuntimeException("failed to load configuration file: " + file.getAbsolutePath(), e);
         }
@@ -62,7 +62,6 @@ public class GameLauncher {
             if (levelData == null) {
                 throw new RuntimeException("Level " + lvl + " not found in the file");
             }
-    
             MapLevel mapLevel;
             if (compressed) {
                 mapLevel = MapLevel.fromCompressedString(levelData);
@@ -85,6 +84,8 @@ public class GameLauncher {
         }
     
         Game game = new Game(world, configuration, gardenerPosition);
+
+        System.out.println("Game successfully loaded !!");
         return game;
     }
 

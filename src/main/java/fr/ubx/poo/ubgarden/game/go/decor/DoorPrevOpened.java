@@ -4,8 +4,8 @@ import fr.ubx.poo.ubgarden.game.Position;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 
 
-public class DoorNextOpened extends Decor {
-    public DoorNextOpened(Position position) {
+public class  DoorPrevOpened extends Decor {
+    public  DoorPrevOpened(Position position) {
         super(position);
     }
 }

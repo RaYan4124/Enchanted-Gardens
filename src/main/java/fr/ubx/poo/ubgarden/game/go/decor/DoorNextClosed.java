@@ -11,7 +11,4 @@ public class DoorNextClosed extends Decor {
         return false;
     }
 
-    public void open() {
-        // Logic to open the door
-    }
 }

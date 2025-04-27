@@ -6,6 +6,7 @@ import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestWasp;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestHornet;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextClosed;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
@@ -68,6 +69,10 @@ public class Level implements Map {
                     }
                     case DoorNextOpened:{
                         decors.put(position, new DoorNextOpened(position));
+                        break;
+                    }
+                    case DoorPrevOpened:{
+                        decors.put(position, new DoorPrevOpened(position));
                         break;
                     }
                     case DoorNextClosed:{
