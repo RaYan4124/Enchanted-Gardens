@@ -21,8 +21,9 @@
     import javafx.scene.text.Font;
     import javafx.scene.text.Text;
     import javafx.scene.text.TextAlignment;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 
-    import java.util.*;
+import java.util.*;
 
 
     public final class GameEngine {
@@ -164,6 +165,17 @@
             if (gardener.getEnergy() <= 0) {
                 gameLoop.stop();
                 showMessage("Game Over !!", Color.RED);
+            } else {
+                game.world().getGrid().values().stream()
+                    .filter(decor -> decor instanceof Hedgehog)
+                    .map(decor -> (Hedgehog) decor)
+                    .findFirst()
+                    .ifPresent(hedgehog -> {
+                        if (gardener.getPosition().equals(hedgehog.getPosition())) {
+                            gameLoop.stop();
+                            showMessage("You Won !!", Color.GREEN);
+                        }
+                    });
             }
         }
 
