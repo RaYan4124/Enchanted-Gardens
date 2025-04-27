@@ -11,9 +11,6 @@ public class PoisonedApple extends Bonus {
     }
 
     
-    public void collect() {
-        // Logic to collect carrots
-        // For example, increase the player's score or inventory
-    }
+    
     
 }

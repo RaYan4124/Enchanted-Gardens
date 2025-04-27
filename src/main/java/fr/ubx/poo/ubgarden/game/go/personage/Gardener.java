@@ -16,6 +16,8 @@ import fr.ubx.poo.ubgarden.game.go.PickupVisitor;
 import fr.ubx.poo.ubgarden.game.go.WalkVisitor;
 import fr.ubx.poo.ubgarden.game.go.bonus.EnergyBoost;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
+import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import fr.ubx.poo.ubgarden.game.engine.Timer;
 import fr.ubx.poo.ubgarden.game.go.Walkable;
@@ -40,40 +42,42 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         this.energy = game.configuration().gardenerEnergy();
         this.timer = new Timer(1000);
         this.currentEnergy = energy;
+        this.diseaseLevel = 1;
     }
 
     @Override
     public void pickUp(EnergyBoost energyBoost) {
         if(this.getEnergy() < 100){
-            this.currentEnergy += 5;
+            this.currentEnergy += 50;
             if(this.currentEnergy > 100){
                 this.currentEnergy = 100;
             }
         }
+        this.diseaseLevel = 1;
+        System.out.println("Apple collected!"); 
         energyBoost.remove();
     }
 
     public void pickUp(Carrots carrots) {
         if (this.getPosition().equals(carrots.getPosition())) {
-            carrots.collect(); 
+            System.out.println("Carrot collected!");  
             carrots.remove();  
         }
     }
+
     
     public void pickUp(Insecticide ins){
-        if(this.getPosition().equals(ins.getPosition())){
-            currentInsecticide += 1;
-            ins.collect();
+        currentInsecticide += 1;
+            System.out.println("Insecticides collected!"); 
             ins.remove();
-        }
     }
 
     public void pickUp(PoisonedApple pa){
-        if(this.getPosition().equals(pa.getPosition())){
-            diseaseLevel += 1 ;
-            pa.collect();
-            pa.remove();
-        }
+    
+        diseaseLevel += 1 ;
+        System.out.println("Oupss Poisoned Apple collected!"); 
+        pa.remove();
+        
     }
 
     public int getEnergy() {
@@ -186,9 +190,20 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         return direction;
     }
 
-    public void ReduceEnergy(){
-        if(this.currentEnergy > 0){
-            this.currentEnergy--;
+    public void ReduceEnergy() {
+        if (this.currentEnergy > 0) {
+
+            Decor currentDecor = game.world().getGrid().get(getPosition());
+            if (currentDecor instanceof Grass) {
+                this.currentEnergy -= 1 * this.diseaseLevel;
+            } else if (currentDecor instanceof Land) {
+                this.currentEnergy -= 2 * this.diseaseLevel;
+            }
+
+            // energie égale 0 au pire
+            if (this.currentEnergy < 0) {
+                this.currentEnergy = 0;
+            }
         }
     }
 

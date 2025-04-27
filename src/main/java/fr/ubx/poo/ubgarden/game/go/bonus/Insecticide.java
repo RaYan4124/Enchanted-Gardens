@@ -9,11 +9,5 @@ public class Insecticide extends Bonus {
     public Insecticide(Position position, Decor decor) {
         super(position, decor);
     }
-
-    
-    public void collect() {
-        // Logic to collect carrots
-        // For example, increase the player's score or inventory
-    }
     
 }

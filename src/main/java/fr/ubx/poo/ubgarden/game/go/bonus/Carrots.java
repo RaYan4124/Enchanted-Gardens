@@ -9,13 +9,5 @@ public class Carrots extends Bonus {
     public Carrots(Position position, Decor decor) {
         super(position, decor);
     }
-
-    
-    public void collect() {
-        // Logic to collect carrots
-        // For example, increase the player's score or inventory
-        System.out.println("Carrot collected!"); 
-
-    }
     
 }
