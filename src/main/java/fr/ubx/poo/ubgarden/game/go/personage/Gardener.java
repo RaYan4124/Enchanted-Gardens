@@ -40,22 +40,22 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         super(game, position);
         this.direction = Direction.DOWN;
         this.energy = game.configuration().gardenerEnergy();
-        this.timer = new Timer(1000);
+        this.timer = new Timer(game.configuration().energyRecoverDuration());
         this.currentEnergy = energy;
         this.diseaseLevel = 1;
     }
 
     @Override
-    public void pickUp(EnergyBoost energyBoost) {
+    public void pickUp(EnergyBoost eb) {
         if(this.getEnergy() < 100){
-            this.currentEnergy += 50;
+            this.currentEnergy += game.configuration().energyBoost();
             if(this.currentEnergy > 100){
                 this.currentEnergy = 100;
             }
         }
         this.diseaseLevel = 1;
         System.out.println("Apple collected!"); 
-        energyBoost.remove();
+        eb.remove();
     }
 
     public void pickUp(Carrots carrots) {

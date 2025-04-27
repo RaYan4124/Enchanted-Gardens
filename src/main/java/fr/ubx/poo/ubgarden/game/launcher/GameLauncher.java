@@ -42,20 +42,49 @@ public class GameLauncher {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream(file)) {
             properties.load(input);
-         } catch (IOException e) {
+            System.out.println("Chargement du fichier...");
+        } catch (IOException e) {
             throw new RuntimeException("failed to load configuration file: " + file.getAbsolutePath(), e);
         }
-
+    
         Configuration configuration = getConfiguration(properties);
-        MapLevel mapLevel = new MapLevelDefaultStart();
-        Position gardenerPosition = mapLevel.getGardenerPosition();
-        if (gardenerPosition == null) {
-            throw new RuntimeException("gardener not found");
+    
+        boolean compressed = booleanProperty(properties, "compression", false);
+        int levelsCount = integerProperty(properties, "levels", 1);
+    
+        World world = new World(levelsCount);
+    
+        MapLevel firstMapLevel = null;
+        Position gardenerPosition = null;
+    
+        for (int lvl = 1; lvl <= levelsCount; lvl++) {
+            String levelData = properties.getProperty("level" + lvl);
+            if (levelData == null) {
+                throw new RuntimeException("Level " + lvl + " not found in the file");
+            }
+    
+            MapLevel mapLevel;
+            if (compressed) {
+                mapLevel = MapLevel.fromCompressedString(levelData);
+            } else {
+                mapLevel = MapLevel.fromString(levelData);
+            }
+    
+            if (lvl == 1) {
+                gardenerPosition = mapLevel.getGardenerPosition();
+                firstMapLevel = mapLevel;
+            }
+    
+            Game game = new Game(world, configuration, gardenerPosition);
+            Map level = new Level(game, lvl, mapLevel);
+            world.put(lvl, level);
         }
-        World world = new World(1);
+    
+        if (gardenerPosition == null) {
+            throw new RuntimeException("gardener not found in level1");
+        }
+    
         Game game = new Game(world, configuration, gardenerPosition);
-        Map level = new Level(game, 1, mapLevel);
-        world.put(1, level);
         return game;
     }
 
