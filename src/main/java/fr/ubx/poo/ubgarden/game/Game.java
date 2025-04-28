@@ -11,10 +11,25 @@ public class Game {
     private boolean switchLevelRequested = false;
     private int switchLevel;
     private boolean GameOver = false;
+    
+    private int carrotsRemaining = 0;
+
     public Game(World world, Configuration configuration, Position gardenerPosition) {
         this.configuration = configuration;
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
+    }
+
+    public int getCarrotsRemaining() {
+        return carrotsRemaining;
+    }
+    
+    public void decrementCarrotsRemaining() {
+        carrotsRemaining--;
+    }
+
+    public void setCarrotsRemaining(int n){
+        this.carrotsRemaining = n;
     }
 
     public boolean isGameOver() {
