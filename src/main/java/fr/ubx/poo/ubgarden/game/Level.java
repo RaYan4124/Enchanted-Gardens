@@ -142,5 +142,13 @@ public class Level implements Map {
         return true;
     }
 
+    public void replaceDecor(Position pos, Decor decor) {
+        decors.put(pos, decor);
+    }
+
+    public Position getCloseDoorPosition (){
+        return CloseDoorPos;
+    }
+
 
 }

@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubgarden.game.go.personage;
 
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
 import fr.ubx.poo.ubgarden.game.Direction;

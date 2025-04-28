@@ -1,6 +1,7 @@
 package fr.ubx.poo.ubgarden.game;
 
 import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 
 
 public class Game {
@@ -26,6 +27,10 @@ public class Game {
     
     public void decrementCarrotsRemaining() {
         carrotsRemaining--;
+        if (carrotsRemaining == 0) {
+            Level lev = (Level) world().getGrid();
+            lev.replaceDecor(lev.getCloseDoorPosition(),  new DoorPrevOpened(lev.getCloseDoorPosition()));
+        }
     }
 
     public void setCarrotsRemaining(int n){
