@@ -13,7 +13,7 @@ public enum ImageResource {
 
     GROUND("ground.png"),
 
-    DOOR_OPENED("door_opened.png"), DOOR_CLOSED("door_closed.png"),
+    DOOR_OPENED("door_opened.png"),DOOR_OPENED_PLUS("door_opened_plus.png"), DOOR_OPENED_MINUS("door_opened_minus.png"), DOOR_CLOSED("door_closed.png"), DOOR_CLOSED_PLUS("door_closed_plus.png"),
 
 
     // Gardener and hornets

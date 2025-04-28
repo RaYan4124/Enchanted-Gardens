@@ -13,6 +13,7 @@ import main.java.fr.ubx.poo.ubgarden.game.go.decor.Flowers;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestWasp;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.NestHornet;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextOpened;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextClosed;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
@@ -21,6 +22,7 @@ import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
 import javafx.scene.layout.Pane;
 
+import static fr.ubx.poo.ubgarden.game.launcher.MapEntity.DoorPrevOpened;
 import static fr.ubx.poo.ubgarden.game.view.ImageResource.*;
 
 
@@ -43,9 +45,11 @@ public final class SpriteFactory {
         if (gameObject instanceof NestHornet)
             return new Sprite(layer, factory.get(NESTHORNET), gameObject);
         if (gameObject instanceof DoorNextOpened)
-            return new Sprite(layer, factory.get(DOOR_OPENED), gameObject);
+            return new Sprite(layer, factory.get(DOOR_OPENED_PLUS), gameObject);
+        if (gameObject instanceof DoorPrevOpened) 
+            return new Sprite(layer, factory.get(DOOR_OPENED_MINUS), gameObject);
         if (gameObject instanceof DoorNextClosed)
-            return new Sprite(layer, factory.get(DOOR_CLOSED), gameObject);
+            return new Sprite(layer, factory.get(DOOR_CLOSED_PLUS), gameObject);
         if (gameObject instanceof Hedgehog)
             return new Sprite(layer, factory.get(HEDGEHOG), gameObject);
         if (gameObject instanceof Carrots)

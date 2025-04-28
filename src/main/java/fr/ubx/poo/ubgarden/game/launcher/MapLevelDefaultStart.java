@@ -7,6 +7,7 @@ import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Carrots;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextClosed;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 
 
