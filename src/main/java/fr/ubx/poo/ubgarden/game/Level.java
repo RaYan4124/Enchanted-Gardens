@@ -35,7 +35,9 @@ public class Level implements Map {
         this.width = entities.width();
         this.height = entities.height();
 
-        for (int i = 0; i < width; i++)
+        int CarrotsNB = 0;
+
+        for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Position position = new Position(level, i, j);
                 MapEntity mapEntity = entities.get(i, j);
@@ -86,6 +88,7 @@ public class Level implements Map {
                     case Carrots:{
                         Decor land = new Land(position);
                         land.setBonus(new Carrots(position, land));
+                        CarrotsNB++;
                         decors.put(position,land);
                         break;
                     }
@@ -105,6 +108,8 @@ public class Level implements Map {
                         throw new RuntimeException("EntityCode " + mapEntity.name() + " not processed");
                 }
             }
+        }
+        game.setCarrotsRemaining(CarrotsNB);
     }
 
     @Override
