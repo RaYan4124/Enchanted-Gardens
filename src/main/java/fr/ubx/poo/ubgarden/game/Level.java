@@ -28,6 +28,8 @@ public class Level implements Map {
 
     private final int height;
 
+    private Position CloseDoorPos;
+
     private final java.util.Map<Position, Decor> decors = new HashMap<>();
 
     public Level(Game game, int level, MapLevel entities) {
@@ -71,6 +73,7 @@ public class Level implements Map {
                     }
                     case DoorNextOpened:{
                         decors.put(position, new DoorNextClosed(position)); // Fermé les portes de passage à un autre level
+                        this.CloseDoorPos = position;
                         break;
                     }
                     case DoorPrevOpened:{
@@ -110,6 +113,9 @@ public class Level implements Map {
             }
         }
         game.setCarrotsRemaining(CarrotsNB);
+        if (game.getCarrotsRemaining() == 0) {
+            decors.put(CloseDoorPos, new DoorNextOpened(CloseDoorPos));
+        }
     }
 
     @Override
