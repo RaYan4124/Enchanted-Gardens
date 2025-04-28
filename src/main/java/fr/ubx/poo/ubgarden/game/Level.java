@@ -70,7 +70,7 @@ public class Level implements Map {
                         break;
                     }
                     case DoorNextOpened:{
-                        decors.put(position, new DoorNextOpened(position));
+                        decors.put(position, new DoorNextClosed(position)); // Fermé les portes de passage à un autre level
                         break;
                     }
                     case DoorPrevOpened:{
