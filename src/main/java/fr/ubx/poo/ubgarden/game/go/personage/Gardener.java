@@ -3,7 +3,7 @@
  */
 
 package fr.ubx.poo.ubgarden.game.go.personage;
-
+import fr.ubx.poo.ubgarden.game.Level;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
@@ -44,14 +44,15 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         this.timer = new Timer(game.configuration().energyRecoverDuration());
         this.currentEnergy = energy;
         this.diseaseLevel = 1;
+        System.out.println("Gardener created with energy: " + game.configuration().gardenerEnergy());
     }
 
     @Override
     public void pickUp(EnergyBoost eb) {
-        if(this.getEnergy() < 100){
+        if(this.getEnergy() < game.configuration().gardenerEnergy()){
             this.currentEnergy += game.configuration().energyBoost();
-            if(this.currentEnergy > 100){
-                this.currentEnergy = 100;
+            if(this.currentEnergy > game.configuration().gardenerEnergy()){
+                this.currentEnergy = game.configuration().gardenerEnergy();
             }
         }
         this.diseaseLevel = 1;
@@ -62,8 +63,11 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     public void pickUp(Carrots carrots) {
         if (this.getPosition().equals(carrots.getPosition())) {
             System.out.println("Carrot collected!");
-            game.decrementCarrotsRemaining();
-            System.out.println(game.getCarrotsRemaining() + " Carrots left ...");
+            //game.decrementCarrotsRemaining();
+            //System.out.println(game.getCarrotsRemaining() + " Carrots left ...");
+            Level level = (Level) game.world().getGrid();
+            level.decrementCarrotsRemaining();
+            System.out.println(level.getCarrotsRemaining() + " Carrots left ...");
             carrots.remove();  
         }
     }
@@ -170,7 +174,7 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
             timer.stop(); //aucune regenaration d'energie en cours
             lastreduceenergytime = now;
         }else{
-            if(currentEnergy < 100){
+            if(currentEnergy < game.configuration().gardenerEnergy()){
                 timer.update(now); //mis a jour a l'instant t
                 if(!timer.isRunning() && (now - lastreduceenergytime) > 1000000000){ //si le temps entre la derniere reduction et now est d'en moins 1s
                     currentEnergy++;
@@ -203,7 +207,6 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
                 this.currentEnergy -= 2 * this.diseaseLevel;
             }
 
-            // energie égale 0 au pire
             if (this.currentEnergy < 0) {
                 this.currentEnergy = 0;
             }

@@ -25,7 +25,6 @@ public class GameLauncher {
     }
 
     private Configuration getConfiguration(Properties properties) {
-
         // Load parameters
         int waspMoveFrequency = integerProperty(properties, "waspMoveFrequency", 2);
         int hornetMoveFrequency = integerProperty(properties, "hornetMoveFrequency", 1);

@@ -14,9 +14,9 @@ public record Configuration(int gardenerEnergy, int energyBoost, long energyReco
         }
 
         return new Configuration(
-            Integer.parseInt(properties.getProperty("gardenerEnergy", "100")),
+            Integer.parseInt(properties.getProperty("gardenerEnergy", "150")),
             Integer.parseInt(properties.getProperty("energyBoost", "50")),
-            Long.parseLong(properties.getProperty("energyRecoverDuration", "1000")),
+            Long.parseLong(properties.getProperty("energyRecoverDuration", "1500")),
             Long.parseLong(properties.getProperty("diseaseDuration", "5000")),
             Integer.parseInt(properties.getProperty("waspMoveFrequency", "1")),
             Integer.parseInt(properties.getProperty("hornetMoveFrequency", "2"))

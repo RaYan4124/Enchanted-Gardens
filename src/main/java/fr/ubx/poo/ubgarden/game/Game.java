@@ -13,28 +13,12 @@ public class Game {
     private int switchLevel;
     private boolean GameOver = false;
     
-    private int carrotsRemaining = 0;
 
     public Game(World world, Configuration configuration, Position gardenerPosition) {
         this.configuration = configuration;
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
-    }
-
-    public int getCarrotsRemaining() {
-        return carrotsRemaining;
-    }
-    
-    public void decrementCarrotsRemaining() {
-        carrotsRemaining--;
-        if (carrotsRemaining == 0) {
-            Level lev = (Level) world().getGrid();
-            lev.replaceDecor(lev.getCloseDoorPosition(),  new DoorPrevOpened(lev.getCloseDoorPosition()));
-        }
-    }
-
-    public void setCarrotsRemaining(int n){
-        this.carrotsRemaining = n;
+        System.out.println(configuration.gardenerEnergy()+" " + configuration.energyRecoverDuration());
     }
 
     public boolean isGameOver() {
@@ -73,5 +57,4 @@ public class Game {
     public void clearSwitchLevel() {
         switchLevelRequested = false;
     }
-
 }

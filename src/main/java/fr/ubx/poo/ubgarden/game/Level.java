@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class Level implements Map {
 
+    private final Game game;
     private final int level;
     private final int width;
 
@@ -37,7 +38,11 @@ public class Level implements Map {
     private final java.util.Map<Position, Decor> decors = new HashMap<>();
     private final List<Wasp> wasps = new ArrayList<>();
 
+    private int carrotsCount = 0;
+    private int carrotsRemaining = 0;
+
     public Level(Game game, int level, MapLevel entities) {
+        this.game = game;
         this.level = level;
         this.width = entities.width();
         this.height = entities.height();
@@ -96,7 +101,8 @@ public class Level implements Map {
                     case Carrots:{
                         Decor land = new Land(position);
                         land.setBonus(new Carrots(position, land));
-                        CarrotsNB++;
+                        carrotsCount++;
+                        carrotsRemaining++;
                         decors.put(position,land);
                         break;
                     }
@@ -123,11 +129,24 @@ public class Level implements Map {
                 }
             }
         }
-        game.setCarrotsRemaining(CarrotsNB);
-        if (game.getCarrotsRemaining() == 0) {
-            decors.put(CloseDoorPos, new DoorNextOpened(CloseDoorPos));
+    }
+
+    public int getCarrotsCount() {
+        return carrotsCount;
+    }
+    
+    public int getCarrotsRemaining() {
+        return carrotsRemaining;
+    }
+    
+    public void decrementCarrotsRemaining() {
+        carrotsRemaining--;
+        if (carrotsRemaining == 0) {
+
+            replaceDecor(getCloseDoorPosition(), new DoorNextOpened(getCloseDoorPosition()));
         }
     }
+
 
     @Override
     public int width() {
