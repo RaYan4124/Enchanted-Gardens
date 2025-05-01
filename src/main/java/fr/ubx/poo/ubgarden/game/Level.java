@@ -17,9 +17,13 @@ import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
+import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Level implements Map {
 
@@ -31,6 +35,7 @@ public class Level implements Map {
     private Position CloseDoorPos;
 
     private final java.util.Map<Position, Decor> decors = new HashMap<>();
+    private final List<Wasp> wasps = new ArrayList<>();
 
     public Level(Game game, int level, MapLevel entities) {
         this.level = level;
@@ -106,6 +111,12 @@ public class Level implements Map {
                         grass.setBonus(new Insecticide(position, grass));
                         decors.put(position,grass);
                         break;
+                    } 
+                    case Wasp:{
+                        Wasp wasp = new Wasp(game, position);
+                        wasps.add(wasp);
+                        decors.put(position, new Grass(position));
+                        break;
                     }
                     default:
                         throw new RuntimeException("EntityCode " + mapEntity.name() + " not processed");
@@ -150,5 +161,11 @@ public class Level implements Map {
         return CloseDoorPos;
     }
 
+    public void addWasp(Wasp wasp) {
+        wasps.add(wasp);
+    }
 
+    public List<Wasp> getWasps() {
+        return wasps;
+    }
 }

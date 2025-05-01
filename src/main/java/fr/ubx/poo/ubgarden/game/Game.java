@@ -29,7 +29,7 @@ public class Game {
         carrotsRemaining--;
         if (carrotsRemaining == 0) {
             Level lev = (Level) world().getGrid();
-            lev.replaceDecor(lev.getCloseDoorPosition(),  new DoorPrevOpened(lev.getCloseDoorPosition()));
+            lev.replaceclsDecor(lev.getCloseDoorPosition(),  new DoorPrevOpened(lev.getCloseDoorPosition()));
         }
     }
 

@@ -1,27 +1,29 @@
-    /*
-     * Copyright (c) 2020. Laurent Réveillère
-     */
+/*
+ * Copyright (c) 2020. Laurent Réveillère
+ */
+package fr.ubx.poo.ubgarden.game.engine;
 
-    package fr.ubx.poo.ubgarden.game.engine;
-
-    import fr.ubx.poo.ubgarden.game.Direction;
-    import fr.ubx.poo.ubgarden.game.Game;
-    import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
-    import fr.ubx.poo.ubgarden.game.view.ImageResource;
-    import fr.ubx.poo.ubgarden.game.view.Sprite;
-    import fr.ubx.poo.ubgarden.game.view.SpriteFactory;
-    import fr.ubx.poo.ubgarden.game.view.SpriteGardener;
-    import javafx.animation.AnimationTimer;
-    import javafx.application.Platform;
-    import javafx.scene.Group;
-    import javafx.scene.Scene;
-    import javafx.scene.layout.Pane;
-    import javafx.scene.layout.StackPane;
-    import javafx.scene.paint.Color;
-    import javafx.scene.text.Font;
-    import javafx.scene.text.Text;
-    import javafx.scene.text.TextAlignment;
+import fr.ubx.poo.ubgarden.game.Level;
+import fr.ubx.poo.ubgarden.game.Direction;
+import fr.ubx.poo.ubgarden.game.Game;
+import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
+import fr.ubx.poo.ubgarden.game.view.ImageResource;
+import fr.ubx.poo.ubgarden.game.view.Sprite;
+import fr.ubx.poo.ubgarden.game.view.SpriteFactory;
+import fr.ubx.poo.ubgarden.game.view.SpriteGardener;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
+import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
+import main.java.fr.ubx.poo.ubgarden.game.view.SpriteWasp;
 
 import java.util.*;
 
@@ -83,6 +85,11 @@ import java.util.*;
                     bonus.setModified(true);
                 }
             }
+
+            for (Wasp wasp : ((Level)game.world().getGrid()).getWasps()) {
+                sprites.add(new SpriteWasp(layer, wasp));
+            }
+
 
             sprites.add(new SpriteGardener(layer, gardener));
             resizeScene(sceneWidth, sceneHeight);
@@ -162,6 +169,10 @@ import java.util.*;
         private void update(long now) {
             game.world().getGrid().values().forEach(decor -> decor.update(now));
             gardener.update(now);
+            for (Wasp wasp : ((Level)game.world().getGrid()).getWasps()) {
+                wasp.update(now);
+            }
+
             if (gardener.getEnergy() <= 0) {
                 this.game.setGameOver(true);
                 gameLoop.stop();
