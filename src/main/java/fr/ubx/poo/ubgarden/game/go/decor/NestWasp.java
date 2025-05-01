@@ -12,9 +12,11 @@ import fr.ubx.poo.ubgarden.game.Level;
 
 public class NestWasp extends Decor {
     private final Timer dropTimer = new Timer(5000);
+    private final Game game;
 
-    public NestWasp(Position position) {
+    public NestWasp(Game game, Position position) {
         super(position);
+        this.game = game;
     }
 
     public boolean isWalkable() {
