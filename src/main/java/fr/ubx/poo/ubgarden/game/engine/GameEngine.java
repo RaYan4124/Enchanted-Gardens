@@ -133,7 +133,18 @@ import java.util.*;
         }
 
         private void checkCollision() {
-            // Check a collision between the gardener and a wasp or an hornet
+            Level level = (Level) game.world().getGrid();
+            for (Wasp wasp : level.getWasps()) {
+                if (wasp.isDeleted()) continue;
+                if (wasp.getPosition().equals(gardener.getPosition())) {
+                    if (gardener.getInsecticide() > 0) {
+                        wasp.remove();
+                        gardener.useInsecticide();
+                    } else {
+                        gardener.hurt();
+                    }
+                }
+            }
         }
 
         private void processInput() {
@@ -185,19 +196,6 @@ import java.util.*;
                     sprites.add(new SpriteWasp(layer, wasp));
                     waspsWithSprite.add(wasp);
                 }
-                if(wasp.getPosition().equals(gardener.getPosition())) {
-                    System.out.println("Collision! Insecticide: " + gardener.getInsecticide());
-
-                    if(gardener.getInsecticide() > 0) {
-                        System.out.println("Use insecticide!");
-                        wasp.remove();
-                        gardener.useInsecticide();
-                        continue;
-                    }else {
-                        System.out.println("Hurt!");
-                        gardener.hurt();
-                    }
-                }
             }
             //sprite pour les insecticide generé
             for (Decor decor : level.values()) {
@@ -210,6 +208,8 @@ import java.util.*;
                     }
                 }
             }
+
+            checkCollision();
 
             if (gardener.getEnergy() <= 0) {
                 this.game.setGameOver(true);

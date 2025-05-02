@@ -80,7 +80,7 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
         List<Direction> dirs = Arrays.asList(Direction.values());
         Collections.shuffle(dirs);
         for (Direction dir : dirs) {
-            if (canMove(dir)) {
+            if (canMove(dir)){
                 move(dir);
                 break;
             }
