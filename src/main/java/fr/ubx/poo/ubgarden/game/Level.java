@@ -82,8 +82,7 @@ public class Level implements Map {
                         break;
                     }
                     case DoorNextOpened:{
-                        decors.put(position, new DoorNextClosed(position)); // Fermé les portes de passage à un autre level
-                        this.CloseDoorPos = position;
+                        decors.put(position, new DoorNextOpened(position)); // Fermé les portes de passage à un autre level
                         break;
                     }
                     case DoorPrevOpened:{
@@ -92,6 +91,7 @@ public class Level implements Map {
                     }
                     case DoorNextClosed:{
                         decors.put(position, new DoorNextClosed(position));
+                        setCloseDoorPos(position);
                         break;
                     }
                     case Hedgehog:{
@@ -131,6 +131,18 @@ public class Level implements Map {
         }
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setCloseDoorPos(Position pos) {
+        this.CloseDoorPos = pos;
+    }
+
+    public Position getCloseDoorPos() {
+        return CloseDoorPos;
+    }
+
     public int getCarrotsCount() {
         return carrotsCount;
     }
@@ -142,8 +154,9 @@ public class Level implements Map {
     public void decrementCarrotsRemaining() {
         carrotsRemaining--;
         if (carrotsRemaining == 0) {
-
-            replaceDecor(getCloseDoorPosition(), new DoorNextOpened(getCloseDoorPosition()));
+            System.out.println("All carrots collected!");
+            System.out.println(getCloseDoorPos());
+            replaceDecor(getCloseDoorPos(), new DoorNextOpened(getCloseDoorPos()));            
         }
     }
 
@@ -169,15 +182,17 @@ public class Level implements Map {
 
     @Override
     public boolean inside(Position position) {
-        return true;
+        return position.x() >= 0 && position.x() < width && position.y() >= 0 && position.y() < height;
     }
 
     public void replaceDecor(Position pos, Decor decor) {
+        Decor oldDec = decors.get(pos);
+        if (oldDec != null) {
+            oldDec.remove();
+        }
         decors.put(pos, decor);
-    }
-
-    public Position getCloseDoorPosition (){
-        return CloseDoorPos;
+        decor.setModified(true);
+        
     }
 
     public void addWasp(Wasp wasp) {

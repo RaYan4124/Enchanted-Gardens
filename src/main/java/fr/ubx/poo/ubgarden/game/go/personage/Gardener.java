@@ -146,15 +146,17 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         setPosition(nextPos);
 
         // interagit avec l'objet Decor s'il existe
-        Bonus bonus = next.getBonus();
-        if(bonus instanceof Carrots){
-            this.pickUp((Carrots)bonus);
-        }else if(bonus instanceof EnergyBoost){
-            this.pickUp((EnergyBoost)bonus);
-        }else if(bonus instanceof Insecticide){
-            this.pickUp((Insecticide)bonus);
-        }else if(bonus instanceof PoisonedApple){
-            this.pickUp((PoisonedApple)bonus);
+        if(next instanceof Grass || next instanceof Land){
+            Bonus bonus = next.getBonus();
+            if(bonus instanceof Carrots){
+                this.pickUp((Carrots)bonus);
+            }else if(bonus instanceof EnergyBoost){
+                this.pickUp((EnergyBoost)bonus);
+            }else if(bonus instanceof Insecticide){
+                this.pickUp((Insecticide)bonus);
+            }else if(bonus instanceof PoisonedApple){
+                this.pickUp((PoisonedApple)bonus);
+            }
         }
 
 

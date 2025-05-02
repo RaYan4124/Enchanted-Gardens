@@ -55,6 +55,8 @@ public class GameLauncherView extends BorderPane {
 
         // Load from file
         loadItem.setOnAction(e -> {
+            File initialDir = new File(System.getProperty("user.dir"), "world"); //user.dir est le dossier courant du projet
+            fileChooser.setInitialDirectory(initialDir);
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
                 try {

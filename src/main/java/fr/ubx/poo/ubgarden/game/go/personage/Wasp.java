@@ -1,6 +1,13 @@
 package main.java.fr.ubx.poo.ubgarden.game.go.personage;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import java.util.ArrayList;
+import fr.ubx.poo.ubgarden.game.Level;
+import fr.ubx.poo.ubgarden.game.engine.Timer;
 import fr.ubx.poo.ubgarden.game.Direction;
 import fr.ubx.poo.ubgarden.game.Game;
 import fr.ubx.poo.ubgarden.game.Position;
@@ -12,10 +19,15 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
 
     private Direction direction;
     private boolean moveRequested = false;
+    private final Timer moveTimer;
 
     public Wasp(Game game, Position position) {
         super(game, position);
         this.direction = Direction.DOWN;
+        // Calcule la période en millisecondes (ex: 1 mouvement/sec)
+        int freq = game.configuration().waspMoveFrequency();
+        int period = 1000 / Math.max(1, freq);
+        this.moveTimer = new Timer(period);
     }
 
     public void requestMove(Direction direction) {
@@ -39,12 +51,11 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
     }
 
     public void update(long now) {
-        if (moveRequested) {
-            if (canMove(direction)) {
-                move(direction);
-            }
+        moveTimer.update(now);
+        if (!moveTimer.isRunning()) {
+            moveRandom();
+            moveTimer.start();
         }
-        moveRequested = false;
     }
 
     public void hurt(int damage) {
@@ -56,6 +67,17 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    private void moveRandom() {
+        List<Direction> dirs = Arrays.asList(Direction.values());
+        Collections.shuffle(dirs);
+        for (Direction dir : dirs) {
+            if (canMove(dir)) {
+                move(dir);
+                break;
+            }
+        }
     }
 
 }

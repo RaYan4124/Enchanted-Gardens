@@ -3,6 +3,8 @@
  */
 package fr.ubx.poo.ubgarden.game.engine;
 
+import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
+import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 import fr.ubx.poo.ubgarden.game.Level;
 import fr.ubx.poo.ubgarden.game.Direction;
 import fr.ubx.poo.ubgarden.game.Game;
@@ -21,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
 import main.java.fr.ubx.poo.ubgarden.game.view.SpriteWasp;
@@ -35,6 +38,8 @@ import java.util.*;
         private final Gardener gardener;
         private final List<Sprite> sprites = new LinkedList<>();
         private final Set<Sprite> cleanUpSprites = new HashSet<>();
+        private final Set<Wasp> waspsWithSprite = new HashSet<>();
+
 
         private final Scene scene;
 
@@ -169,8 +174,26 @@ import java.util.*;
         private void update(long now) {
             game.world().getGrid().values().forEach(decor -> decor.update(now));
             gardener.update(now);
-            for (Wasp wasp : ((Level)game.world().getGrid()).getWasps()) {
+
+            Level level = (Level)game.world().getGrid();
+            for (Wasp wasp : level.getWasps()) {
                 wasp.update(now);
+                // ajoute un sprite pour chaque nouvelle wasp qui n'en a pas encore
+                if (!waspsWithSprite.contains(wasp)) {
+                    sprites.add(new SpriteWasp(layer, wasp));
+                    waspsWithSprite.add(wasp);
+                }
+            }
+            //sprite pour les insecticide generé
+            for (Decor decor : level.values()) {
+                Bonus bonus = decor.getBonus();
+                if (bonus instanceof Insecticide) {
+                    boolean alreadyDisplayed = sprites.stream()
+                        .anyMatch(sprite -> sprite.getGameObject() == bonus);
+                    if (!alreadyDisplayed) {
+                        sprites.add(SpriteFactory.create(layer, bonus));
+                    }
+                }
             }
 
             if (gardener.getEnergy() <= 0) {
@@ -203,6 +226,28 @@ import java.util.*;
         }
 
         private void render() {
+           /* List<Sprite> toAdd = new ArrayList<>();
+            List<Sprite> toRemove = new ArrayList<>();
+        
+            // Pour chaque décor modifié, on ne supprime que le sprite à la même position
+            for (Decor decor : ((Level)game.world().getGrid()).values()) {
+                if (decor.isModified()) {
+                    for (Sprite sprite : sprites) {
+                        if (sprite.getGameObject() instanceof Decor &&
+                            ((Decor) sprite.getGameObject()).getPosition().equals(decor.getPosition())) {
+                            toRemove.add(sprite);
+                        }
+                    }
+                    toAdd.add(SpriteFactory.create(layer, decor));
+                    decor.setModified(false);
+                }
+            }
+        
+            sprites.removeAll(toRemove);
+            toRemove.forEach(Sprite::remove);
+            sprites.addAll(toAdd);
+        
+            // Affiche tous les sprites*/
             sprites.forEach(Sprite::render);
         }
 
@@ -214,5 +259,15 @@ import java.util.*;
             rootPane.setPrefSize(width, height + StatusBar.height);
             layer.setPrefSize(width, height);
             Platform.runLater(() -> scene.getWindow().sizeToScene());
+        }
+
+        public void replaceDecorSprite(Decor decor) {
+            // Supprime l'ancien sprite à cette position
+            sprites.removeIf(sprite ->
+                sprite.getGameObject() instanceof Decor &&
+                ((Decor) sprite.getGameObject()).getPosition().equals(decor.getPosition())
+            );
+            // Ajoute le nouveau sprite
+            sprites.add(SpriteFactory.create(layer, decor));
         }
     }
