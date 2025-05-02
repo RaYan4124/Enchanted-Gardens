@@ -65,6 +65,7 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
     }
 
     public void hurt(int damage) {
+        
     }
 
     public void hurt() {

@@ -178,10 +178,25 @@ import java.util.*;
             Level level = (Level)game.world().getGrid();
             for (Wasp wasp : level.getWasps()) {
                 wasp.update(now);
+                if (wasp.isDeleted())continue; // si la wasp est supprimee, on l'affiche pas
+                
                 // ajoute un sprite pour chaque nouvelle wasp qui n'en a pas encore
                 if (!waspsWithSprite.contains(wasp)) {
                     sprites.add(new SpriteWasp(layer, wasp));
                     waspsWithSprite.add(wasp);
+                }
+                if(wasp.getPosition().equals(gardener.getPosition())) {
+                    System.out.println("Collision! Insecticide: " + gardener.getInsecticide());
+
+                    if(gardener.getInsecticide() > 0) {
+                        System.out.println("Use insecticide!");
+                        wasp.remove();
+                        gardener.useInsecticide();
+                        continue;
+                    }else {
+                        System.out.println("Hurt!");
+                        gardener.hurt();
+                    }
                 }
             }
             //sprite pour les insecticide generé

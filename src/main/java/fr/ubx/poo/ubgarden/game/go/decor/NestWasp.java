@@ -38,7 +38,7 @@ public class NestWasp extends Decor {
             //nouvelle Wasp
             Wasp wasp = new Wasp(game, this.getPosition());
             var level = (Level) game.world().getGrid();
-            if(level.getWasps().size() >= game.configuration().maxWasp()){
+            if(level.getWasps().size() >= game.configuration().maxwasps()){
                 return;
             }
             level.addWasp(wasp);

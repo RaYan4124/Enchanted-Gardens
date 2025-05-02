@@ -95,6 +95,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         return this.currentInsecticide;
     }
 
+    public void useInsecticide(){
+        if(currentInsecticide > 0){
+            currentInsecticide -= 1;
+        }else{
+            System.out.println("No insecticides left!");
+        }
+    }
+
     public int getDiseaseLevel(){
         return this.diseaseLevel;
     }
@@ -189,6 +197,12 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     }
 
     public void hurt(int damage) {
+        if (this.currentEnergy > 0) {
+            this.currentEnergy -= damage * this.diseaseLevel;
+            if (this.currentEnergy < 0) {
+                this.currentEnergy = 0;
+            }
+        }
     }
 
     public void hurt() {
