@@ -40,6 +40,12 @@ public class Wasp extends GameObject implements Movable, WalkVisitor {
 
     @Override
     public boolean canMove(Direction direction) {
+        Position nextPos = direction.nextPosition(getPosition());
+        // check si la position cible est dans les limites de la carte
+        if (nextPos.x() < 0 || nextPos.x() >= game.world().getGrid().width() ||
+            nextPos.y() < 0 || nextPos.y() >= game.world().getGrid().height()) {
+            return false;
+        }
         return true;
     }
 
