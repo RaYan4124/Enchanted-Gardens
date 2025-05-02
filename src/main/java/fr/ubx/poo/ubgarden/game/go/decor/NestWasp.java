@@ -6,6 +6,8 @@ import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.engine.Timer;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
+import fr.ubx.poo.ubgarden.game.Game;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,9 @@ public class NestWasp extends Decor {
             //nouvelle Wasp
             Wasp wasp = new Wasp(game, this.getPosition());
             var level = (Level) game.world().getGrid();
+            if(level.getWasps().size() >= game.configuration().maxWasp()){
+                return;
+            }
             level.addWasp(wasp);
 
             //insecticide

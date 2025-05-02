@@ -33,8 +33,9 @@ public class GameLauncher {
         int energyBoost = integerProperty(properties, "energyBoost", 50);
         long energyRecoverDuration = integerProperty(properties, "energyRecoverDuration", 1_000);
         long diseaseDuration = integerProperty(properties, "diseaseDuration", 5_000);
+        int maxwasps = integerProperty(properties, "maxWasp", 5);
 
-        return new Configuration(gardenerEnergy, energyBoost, energyRecoverDuration, diseaseDuration, waspMoveFrequency, hornetMoveFrequency);
+        return new Configuration(gardenerEnergy, energyBoost, energyRecoverDuration, diseaseDuration, waspMoveFrequency, hornetMoveFrequency, maxwasps);
     }
 
     public Game load(File file) {

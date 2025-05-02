@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public record Configuration(int gardenerEnergy, int energyBoost, long energyRecoverDuration, long diseaseDuration, int waspMoveFrequency, int hornetMoveFrequency) {
+public record Configuration(int gardenerEnergy, int energyBoost, long energyRecoverDuration, long diseaseDuration, int waspMoveFrequency, int hornetMoveFrequency, int maxWasp) {
     public static Configuration fromProperties(String filePath) {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream(filePath)) {
@@ -19,7 +19,8 @@ public record Configuration(int gardenerEnergy, int energyBoost, long energyReco
             Long.parseLong(properties.getProperty("energyRecoverDuration", "1500")),
             Long.parseLong(properties.getProperty("diseaseDuration", "5000")),
             Integer.parseInt(properties.getProperty("waspMoveFrequency", "1")),
-            Integer.parseInt(properties.getProperty("hornetMoveFrequency", "2"))
+            Integer.parseInt(properties.getProperty("hornetMoveFrequency", "2")),
+            Integer.parseInt(properties.getProperty("maxWasp", "5"))
         );
     }
 }
