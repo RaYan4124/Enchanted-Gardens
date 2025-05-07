@@ -5,6 +5,7 @@
 package fr.ubx.poo.ubgarden.game.go.personage;
 import fr.ubx.poo.ubgarden.game.Level;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
+import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorNextOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
@@ -178,6 +179,17 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
             }else if(bonus instanceof PoisonedApple){
                 this.pickUp((PoisonedApple)bonus);
             }
+        }
+
+        if(next instanceof DoorNextOpened) {
+            int nextLevel = game.world().currentLevel() + 1;
+            game.requestSwitchLevel(nextLevel);
+            return nextPos;
+        }
+        if (next instanceof DoorPrevOpened) {
+            int prevLevel = game.world().currentLevel() - 1;
+            game.requestSwitchLevel(prevLevel);
+            return nextPos;
         }
 
         if (next != null) {

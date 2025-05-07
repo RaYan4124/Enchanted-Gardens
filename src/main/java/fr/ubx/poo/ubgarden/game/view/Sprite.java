@@ -12,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class Sprite {
-
     public static final int size = 40;
     private final Pane layer;
     private final GameObject gameObject;

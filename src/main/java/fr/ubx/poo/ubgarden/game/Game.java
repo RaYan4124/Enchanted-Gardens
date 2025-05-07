@@ -1,5 +1,6 @@
 package fr.ubx.poo.ubgarden.game;
 
+import fr.ubx.poo.ubgarden.game.engine.GameEngine;
 import fr.ubx.poo.ubgarden.game.go.personage.Gardener;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.DoorPrevOpened;
 
@@ -12,6 +13,7 @@ public class Game {
     private boolean switchLevelRequested = false;
     private int switchLevel;
     private boolean GameOver = false;
+    private GameEngine gameEngine;
     
 
     public Game(World world, Configuration configuration, Position gardenerPosition) {
@@ -20,6 +22,10 @@ public class Game {
         gardener = new Gardener(this, gardenerPosition);
         System.out.println(configuration.gardenerEnergy()+" " + configuration.energyRecoverDuration());
     }
+
+    public void setGameEngine(GameEngine ge) { this.gameEngine = ge; }
+    public GameEngine getGameEngine() { return gameEngine; }
+
 
     public boolean isGameOver() {
         return GameOver;

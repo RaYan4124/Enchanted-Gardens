@@ -15,6 +15,7 @@ import fr.ubx.poo.ubgarden.game.go.decor.ground.Land;
 import fr.ubx.poo.ubgarden.game.go.decor.ground.Grass;
 import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
+import fr.ubx.poo.ubgarden.game.view.SpriteFactory;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Hornet;
@@ -163,7 +164,10 @@ public class Level implements Map {
         if (carrotsRemaining == 0) {
             System.out.println("All carrots collected!");
             System.out.println(getCloseDoorPos());
-            replaceDecor(getCloseDoorPos(), new DoorNextOpened(getCloseDoorPos()));            
+            replaceDecor(getCloseDoorPos(), new DoorNextOpened(getCloseDoorPos())); 
+            /*if (game.getGameEngine() != null) {
+                game.getGameEngine().replaceDecorSprite(get(getCloseDoorPos()));
+            }*/
         }
     }
 
@@ -216,5 +220,17 @@ public class Level implements Map {
 
     public List<Hornet> getHornets() {
         return hornets;
+    }
+
+    public Position findEntryDoorPosition() {
+        for (int x = 0; x < width(); x++) {
+            for (int y = 0; y < height(); y++) {
+                Decor decor = get(new Position(level, x, y));
+                if (decor instanceof DoorPrevOpened || decor instanceof DoorNextOpened) {
+                    return new Position(level, x, y);
+                }
+            }
+        }
+        return null;
     }
 }

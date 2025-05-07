@@ -39,7 +39,7 @@ import java.util.*;
         private static AnimationTimer gameLoop;
         private final Game game;
         private final Gardener gardener;
-        private final List<Sprite> sprites = new LinkedList<>();
+        public List<Sprite> sprites = new LinkedList<>();
         private final Set<Sprite> cleanUpSprites = new HashSet<>();
         private final Set<Wasp> waspsWithSprite = new HashSet<>();
         private final Set<Hornet> hornetsWithSprite = new HashSet<>();
@@ -56,6 +56,7 @@ import java.util.*;
 
         public GameEngine(Game game, Scene scene) {
             this.game = game;
+            game.setGameEngine(this);
             this.scene = scene;
             this.gardener = game.getGardener();
             initialize();
@@ -81,6 +82,12 @@ import java.util.*;
             rootPane.getChildren().clear();
             rootPane.setPrefSize(sceneWidth, sceneHeight + StatusBar.height);
             rootPane.getChildren().add(root);
+
+            Level level = (Level) game.world().getGrid();
+            Position entryPos = level.findEntryDoorPosition();
+             if (entryPos != null) {
+                gardener.setPosition(entryPos);
+            }
 
             // Create sprites
             int currentLevel = game.world().currentLevel();
@@ -171,14 +178,14 @@ import java.util.*;
                         gardener.useInsecticide();
                         gardener.useInsecticide();
                         hornet.remove();
-                    } else if (gardener.getInsecticide() == 1) {
+                    }else if (gardener.getInsecticide() == 1) {
                         gardener.useInsecticide();
                         hornet.hitInsecticide();
                         gardener.hurt(30, now);
                         if (hornet.isKilledByInsecticide()) {
                             hornet.remove();
                         }
-                    } else if (!gardener.isJustHurt()) {
+                    }else if (!gardener.isJustHurt()) {
                         gardener.hurt(30, now);
                         gardener.setJustHurt(true);
                         hornet.hitGardener();
