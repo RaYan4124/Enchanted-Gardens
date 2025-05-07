@@ -17,6 +17,7 @@ import fr.ubx.poo.ubgarden.game.launcher.MapEntity;
 import fr.ubx.poo.ubgarden.game.launcher.MapLevel;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.PoisonedApple;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
+import main.java.fr.ubx.poo.ubgarden.game.go.personage.Hornet;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class Level implements Map {
 
     private final java.util.Map<Position, Decor> decors = new HashMap<>();
     private final List<Wasp> wasps = new ArrayList<>();
+    private final List<Hornet> hornets = new ArrayList<>();
 
     private int carrotsCount = 0;
     private int carrotsRemaining = 0;
@@ -201,5 +203,13 @@ public class Level implements Map {
 
     public List<Wasp> getWasps() {
         return wasps;
+    }
+
+    public void addHornet(Hornet hornet) {
+        hornets.add(hornet);
+    }
+    
+    public List<Hornet> getHornets() {
+        return hornets;
     }
 }

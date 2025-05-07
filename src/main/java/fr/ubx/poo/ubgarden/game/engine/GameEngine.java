@@ -3,6 +3,7 @@
  */
 package fr.ubx.poo.ubgarden.game.engine;
 
+import fr.ubx.poo.ubgarden.game.Position;
 import fr.ubx.poo.ubgarden.game.go.bonus.Bonus;
 import fr.ubx.poo.ubgarden.game.go.decor.Decor;
 import fr.ubx.poo.ubgarden.game.Level;
@@ -123,12 +124,14 @@ import java.util.*;
 
         private void checkLevel() {
             if (game.isSwitchLevelRequested()) {
-                // Find the new level to switch to
                 // clear all sprites
+                sprites.clear();
+                waspsWithSprite.clear();
                 // change the current level
-                // Find the position of the door to reach
+                game.world().setCurrentLevel(game.getSwitchLevel());
                 // Set the position of the gardener
-                // initialize();
+                initialize();
+                game.clearSwitchLevel();
             }
         }
 
@@ -241,29 +244,13 @@ import java.util.*;
         }
 
         private void render() {
-           /* List<Sprite> toAdd = new ArrayList<>();
-            List<Sprite> toRemove = new ArrayList<>();
-        
-            // Pour chaque décor modifié, on ne supprime que le sprite à la même position
-            for (Decor decor : ((Level)game.world().getGrid()).values()) {
-                if (decor.isModified()) {
-                    for (Sprite sprite : sprites) {
-                        if (sprite.getGameObject() instanceof Decor &&
-                            ((Decor) sprite.getGameObject()).getPosition().equals(decor.getPosition())) {
-                            toRemove.add(sprite);
-                        }
-                    }
-                    toAdd.add(SpriteFactory.create(layer, decor));
-                    decor.setModified(false);
-                }
-            }
-        
-            sprites.removeAll(toRemove);
-            toRemove.forEach(Sprite::remove);
-            sprites.addAll(toAdd);
-        
-            // Affiche tous les sprites*/
             sprites.forEach(Sprite::render);
+            for (Sprite sprite : sprites) {
+                if (sprite instanceof SpriteWasp) {
+                    ((SpriteWasp) sprite).updateImage();
+                }
+                sprite.render();
+            }
         }
 
         public void start() {
