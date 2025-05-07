@@ -38,6 +38,10 @@ public class Hornet extends GameObject implements Movable, WalkVisitor {
         System.out.println(gardenerHits);
     }
 
+    public int getGardenerHits() {
+        return gardenerHits;
+    }
+
     public boolean isKilledByGardener() {
         return gardenerHits >= 2;
     }

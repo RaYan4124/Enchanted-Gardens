@@ -140,9 +140,10 @@ import java.util.*;
 
         private void checkCollision(long now) {
             Level level = (Level) game.world().getGrid();
-
+            // collisions avec les wasps
             for (Wasp wasp : level.getWasps()) {
                 if (wasp.isDeleted()) continue;
+                // collision avec le gardener
                 if (wasp.getPosition().equals(gardener.getPosition())) {
                     if (gardener.getInsecticide() > 0) {
                         gardener.useInsecticide();
@@ -151,49 +152,46 @@ import java.util.*;
                     }
                     wasp.remove();
                 }
-
-                //wasp marche sur un insecticide
+        
+                // wasp marche sur insecticide
                 Decor decor = level.get(wasp.getPosition());
                 if (decor != null && decor.getBonus() instanceof Insecticide) {
                     wasp.remove();
                     decor.getBonus().remove();
                 }
             }
-
-
-            //collisions avec les hornets
+        
+            // collisions hornets
             for (Hornet hornet : level.getHornets()) {
                 if (hornet.isDeleted()) continue;
+        
+                // collision avec le gardener
                 if (hornet.getPosition().equals(gardener.getPosition())) {
                     if (gardener.getInsecticide() >= 2) {
+                        gardener.useInsecticide();
+                        gardener.useInsecticide();
                         hornet.remove();
-                        gardener.useInsecticide();
-                        gardener.useInsecticide();
-                    } else if (gardener.getInsecticide() == 1 && hornet.getInsecticideHits() == 1) {
-                        gardener.useInsecticide();
-                        hornet.hitInsecticide();   
-                        if (hornet.isKilledByInsecticide()) {
-                            hornet.remove();
-                        }
                     } else if (gardener.getInsecticide() == 1) {
                         gardener.useInsecticide();
-                        hornet.hitInsecticide();   
+                        hornet.hitInsecticide();
                         gardener.hurt(30, now);
                         if (hornet.isKilledByInsecticide()) {
                             hornet.remove();
                         }
-                    } else if(!gardener.isJustHurt()) {
-                        gardener.hurt(30, now); 
+                    } else if (!gardener.isJustHurt()) {
+                        gardener.hurt(30, now);
                         gardener.setJustHurt(true);
                         hornet.hitGardener();
-                    }else if(hornet.isKilledByInsecticide() || hornet.isKilledByGardener()){
-                        hornet.remove();
+                        if (hornet.isKilledByGardener()) {
+                            hornet.remove();
+                        }
                     }
                 }
-                //hornet marche sur insecticide
+        
+                //hornet marche sur un insecticide
                 Decor decor = level.get(hornet.getPosition());
                 if (decor != null && decor.getBonus() instanceof Insecticide) {
-                    hornet.hitInsecticide();   
+                    hornet.hitInsecticide();
                     decor.getBonus().remove();
                     if (hornet.isKilledByInsecticide()) {
                         hornet.remove();

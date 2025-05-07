@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NestHornet extends Decor {
-    private final Timer dropTimer = new Timer(5000);
+    private final Timer dropTimer = new Timer(10000);
     private final Game game;
 
     public NestHornet(Game game, Position position) {
@@ -38,12 +38,14 @@ public class NestHornet extends Decor {
             }
             level.addHornet(hornet);
 
-            // Insecticide sur une case d'herbe libre
-            Position freePos = findRandomFreePosition(level);
-            if (freePos != null) {
-                Decor decor = level.get(freePos);
-                if (decor != null && decor.getBonus() == null) {
-                    decor.setBonus(new Insecticide(freePos, decor));
+            Position freePos1 = findRandomFreePosition(level);
+            Position freePos2 = findRandomFreePosition(level);
+            if (freePos1 != null && freePos2 != null) {
+                Decor decor1 = level.get(freePos1);
+                Decor decor2 = level.get(freePos2);
+                if (decor1 != null && decor1.getBonus() == null && decor2 != null && decor2.getBonus() == null) {
+                    decor1.setBonus(new Insecticide(freePos1, decor1));
+                    decor2.setBonus(new Insecticide(freePos2, decor2));
                 }
             }
         }
