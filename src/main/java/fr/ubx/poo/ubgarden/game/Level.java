@@ -80,7 +80,7 @@ public class Level implements Map {
                         break;
                     }
                     case NestHornet:{
-                        decors.put(position, new NestHornet(position));
+                        decors.put(position, new NestHornet(game, position));
                         break;
                     }
                     case DoorNextOpened:{
@@ -123,6 +123,11 @@ public class Level implements Map {
                     case Wasp:{
                         Wasp wasp = new Wasp(game, position);
                         wasps.add(wasp);
+                        decors.put(position, new Grass(position));
+                        break;
+                    } case Hornet:{
+                        Hornet hornet = new Hornet(game, position);
+                        hornets.add(hornet);
                         decors.put(position, new Grass(position));
                         break;
                     }
@@ -208,7 +213,7 @@ public class Level implements Map {
     public void addHornet(Hornet hornet) {
         hornets.add(hornet);
     }
-    
+
     public List<Hornet> getHornets() {
         return hornets;
     }

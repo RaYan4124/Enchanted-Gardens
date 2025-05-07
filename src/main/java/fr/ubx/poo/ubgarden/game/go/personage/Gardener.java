@@ -35,6 +35,10 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     private boolean moveRequested = false;
     private Timer timer;
     private long lastreduceenergytime = 0;
+    private long lastHurtTime = 0;
+    private static final long INVULNERABILITY_DURATION = 1_000_000_000L; //une seconde en ns
+    private boolean justHurt = false;
+
 
     public Gardener(Game game, Position position) {
 
@@ -45,6 +49,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         this.currentEnergy = energy;
         this.diseaseLevel = 1;
         System.out.println("Gardener created with energy: " + game.configuration().gardenerEnergy());
+    }
+
+    public void setJustHurt(boolean value) {
+        this.justHurt = value;
+    }
+
+    public boolean isJustHurt() {
+        return justHurt;
     }
 
     @Override
@@ -145,13 +157,14 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
     
         // check si la position cible est dans les limites de la carte
         if (!this.canMove(direction)) {
-            return getPosition(); // retourne la position actuelle sans effectuer de déplacement
+            return getPosition(); // retourne la position actuelle sans effectuer de deplacement
         }
 
-        // recupere l'objet Decor à la position cible
+        // recupere l'objet Decor a la position cible
         Decor next = game.world().getGrid().get(nextPos);
         // met à jour la position du jardinier
         setPosition(nextPos);
+        this.setJustHurt(false);
 
         // interagit avec l'objet Decor s'il existe
         if(next instanceof Grass || next instanceof Land){
@@ -166,7 +179,6 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
                 this.pickUp((PoisonedApple)bonus);
             }
         }
-
 
         if (next != null) {
             next.walkableBy(this);
@@ -196,18 +208,22 @@ public class Gardener extends GameObject implements Movable, PickupVisitor, Walk
         }    
     }
 
-    public void hurt(int damage) {
+    public void hurt(int damage, long now) {
+        System.out.println("before hurt: " + this.currentEnergy);
+        if (now - lastHurtTime < INVULNERABILITY_DURATION) return;
         if (this.currentEnergy > 0) {
             this.currentEnergy -= damage * this.diseaseLevel;
             if (this.currentEnergy < 0) {
                 this.currentEnergy = 0;
             }
         }
+        lastHurtTime = now;
+        System.out.println("after hurt: " + this.currentEnergy);
     }
 
-    public void hurt() {
+    /*public void hurt() {
         hurt(1);
-    }
+    }*/
 
     public Direction getDirection() {
         return direction;

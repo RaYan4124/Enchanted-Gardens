@@ -26,7 +26,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.fr.ubx.poo.ubgarden.game.go.bonus.Insecticide;
 import main.java.fr.ubx.poo.ubgarden.game.go.decor.Hedgehog;
+import main.java.fr.ubx.poo.ubgarden.game.go.personage.Hornet;
 import main.java.fr.ubx.poo.ubgarden.game.go.personage.Wasp;
+import main.java.fr.ubx.poo.ubgarden.game.view.SpriteHornet;
 import main.java.fr.ubx.poo.ubgarden.game.view.SpriteWasp;
 
 import java.util.*;
@@ -40,6 +42,7 @@ import java.util.*;
         private final List<Sprite> sprites = new LinkedList<>();
         private final Set<Sprite> cleanUpSprites = new HashSet<>();
         private final Set<Wasp> waspsWithSprite = new HashSet<>();
+        private final Set<Hornet> hornetsWithSprite = new HashSet<>();
 
 
         private final Scene scene;
@@ -111,7 +114,7 @@ import java.util.*;
 
                     // Do actions
                     update(now);
-                    checkCollision();
+                    //checkCollision(now);
 
                     // Graphic update
                     cleanupSprites();
@@ -135,16 +138,65 @@ import java.util.*;
             }
         }
 
-        private void checkCollision() {
+        private void checkCollision(long now) {
             Level level = (Level) game.world().getGrid();
+
             for (Wasp wasp : level.getWasps()) {
                 if (wasp.isDeleted()) continue;
                 if (wasp.getPosition().equals(gardener.getPosition())) {
                     if (gardener.getInsecticide() > 0) {
-                        wasp.remove();
                         gardener.useInsecticide();
                     } else {
-                        gardener.hurt();
+                        gardener.hurt(20, now);
+                    }
+                    wasp.remove();
+                }
+
+                //wasp marche sur un insecticide
+                Decor decor = level.get(wasp.getPosition());
+                if (decor != null && decor.getBonus() instanceof Insecticide) {
+                    wasp.remove();
+                    decor.getBonus().remove();
+                }
+            }
+
+
+            //collisions avec les hornets
+            for (Hornet hornet : level.getHornets()) {
+                if (hornet.isDeleted()) continue;
+                if (hornet.getPosition().equals(gardener.getPosition())) {
+                    if (gardener.getInsecticide() >= 2) {
+                        hornet.remove();
+                        gardener.useInsecticide();
+                        gardener.useInsecticide();
+                    } else if (gardener.getInsecticide() == 1 && hornet.getInsecticideHits() == 1) {
+                        gardener.useInsecticide();
+                        hornet.hitInsecticide();   
+                        if (hornet.isKilledByInsecticide()) {
+                            hornet.remove();
+                        }
+                    } else if (gardener.getInsecticide() == 1) {
+                        gardener.useInsecticide();
+                        hornet.hitInsecticide();   
+                        gardener.hurt(30, now);
+                        if (hornet.isKilledByInsecticide()) {
+                            hornet.remove();
+                        }
+                    } else if(!gardener.isJustHurt()) {
+                        gardener.hurt(30, now); 
+                        gardener.setJustHurt(true);
+                        hornet.hitGardener();
+                    }else if(hornet.isKilledByInsecticide() || hornet.isKilledByGardener()){
+                        hornet.remove();
+                    }
+                }
+                //hornet marche sur insecticide
+                Decor decor = level.get(hornet.getPosition());
+                if (decor != null && decor.getBonus() instanceof Insecticide) {
+                    hornet.hitInsecticide();   
+                    decor.getBonus().remove();
+                    if (hornet.isKilledByInsecticide()) {
+                        hornet.remove();
                     }
                 }
             }
@@ -193,14 +245,23 @@ import java.util.*;
             for (Wasp wasp : level.getWasps()) {
                 wasp.update(now);
                 if (wasp.isDeleted())continue; // si la wasp est supprimee, on l'affiche pas
-                
                 // ajoute un sprite pour chaque nouvelle wasp qui n'en a pas encore
                 if (!waspsWithSprite.contains(wasp)) {
                     sprites.add(new SpriteWasp(layer, wasp));
                     waspsWithSprite.add(wasp);
                 }
             }
-            //sprite pour les insecticide generé
+
+            for (Hornet hornet : level.getHornets()) {
+                hornet.update(now);
+                if (hornet.isDeleted()) continue;
+                if (!hornetsWithSprite.contains(hornet)) {
+                    sprites.add(new SpriteHornet(layer, hornet));
+                    hornetsWithSprite.add(hornet);
+                }
+            }
+
+            //sprite pour insecticide generé
             for (Decor decor : level.values()) {
                 Bonus bonus = decor.getBonus();
                 if (bonus instanceof Insecticide) {
@@ -212,7 +273,7 @@ import java.util.*;
                 }
             }
 
-            checkCollision();
+            checkCollision(now);
 
             if (gardener.getEnergy() <= 0) {
                 this.game.setGameOver(true);
@@ -264,12 +325,12 @@ import java.util.*;
         }
 
         public void replaceDecorSprite(Decor decor) {
-            // Supprime l'ancien sprite à cette position
+            // supprime l'ancien sprite a cette position
             sprites.removeIf(sprite ->
                 sprite.getGameObject() instanceof Decor &&
                 ((Decor) sprite.getGameObject()).getPosition().equals(decor.getPosition())
             );
-            // Ajoute le nouveau sprite
+            // ajoute le nouveau
             sprites.add(SpriteFactory.create(layer, decor));
         }
     }
